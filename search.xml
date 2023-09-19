@@ -8,7 +8,7 @@
       <link href="/2023/09/09/index/"/>
       <url>/2023/09/09/index/</url>
       
-        <content type="html"><![CDATA[<pre><code class="language-C++">#include &lt;iostream&gt;int main(){    std::cout&lt;&lt;"sadasd"&lt;&lt;std::endl;}</code></pre><p><img src="/images/21.jpg" alt=""></p>]]></content>
+        <content type="html"><![CDATA[<pre><code class="language-C++">#include &lt;iostream&gt;int main(){    std::cout&lt;&lt;"sadasd"&lt;&lt;std::endl;}</code></pre><p><img src="/images/21.jpg" alt=""></p><p>change cname test</p><p>test2</p>]]></content>
       
       
       <categories>
