@@ -4,11 +4,43 @@
   
     
     <entry>
+      <title>ROLEX FAST&#39;23 Reading Notes</title>
+      <link href="/2023/11/06/ROLEX-FAST-23-Reading-Notes/"/>
+      <url>/2023/11/06/ROLEX-FAST-23-Reading-Notes/</url>
+      
+        <content type="html"><![CDATA[<p><img src="../../themes/claudia/source/images/ROLEX.png" alt=""></p><h1 id="rolex-a-scalable-rdma-oriented-learned-key-value-store-for-disaggregated-memory-systems"><a class="markdownIt-Anchor" href="#rolex-a-scalable-rdma-oriented-learned-key-value-store-for-disaggregated-memory-systems">#</a> <strong><strong>ROLEX: A Scalable RDMA-oriented Learned Key-Value Store for Disaggregated Memory Systems</strong></strong></h1><p><strong>Title</strong>: ROLEX: A Scalable RDMA-oriented Learned Key-Value Store<br>for Disaggregated Memory Systems</p><p><strong>Authors</strong>:  Pengfei Li, Yu Hua*, Pengfei Zuo, Zhangyu Chen, Jiajie Sheng<br>Wuhan National Laboratory for Optoelectronics, School of Computer<br>Huazhong University of Science and Technology<br>*Corresponding Author: Yu Hua (<a href="mailto:csyhua@hust.edu.cn">csyhua@hust.edu.cn</a>)</p><p><strong>Source</strong>: FAST</p><p><strong>Year</strong>: 2023</p><h1 id="summary"><a class="markdownIt-Anchor" href="#summary">#</a> Summary</h1><h2 id="problem"><a class="markdownIt-Anchor" href="#problem">#</a> Problem</h2><ul><li>How to coalesce ordered KV stores in disaggregated memory system?</li></ul><h2 id="challenges"><a class="markdownIt-Anchor" href="#challenges">#</a> Challenges</h2><ul><li>Limited computing resource on memory nodes.</li><li>Overloaded bandwidth for data transferring.</li><li>Inconsistency issue among different nodes.</li></ul><h2 id="key-insights"><a class="markdownIt-Anchor" href="#key-insights">#</a> Key insights</h2><ul><li><strong>Decoupled retraining and insert operation</strong><ul><li>modify retraining algorithm</li><li>add data movement constraints</li></ul></li><li><strong>Use one sided RDMA to execute all index operations on compute nodes</strong><ul><li>Cache learned model on compute node</li><li>Use fine-grained lock to ensure data consistency among different compute nodes</li></ul></li><li><strong>Asynchronous Retraining</strong><ul><li>Asynchronous retraining on memory nodes to avoid high network bandwidth usage.</li><li>design a <em><strong>shadow redirection scheme</strong></em> to ensure no data loss during retraining</li></ul></li></ul><h1 id="weaknesses"><a class="markdownIt-Anchor" href="#weaknesses">#</a> Weaknesses</h1><ul><li>Data arrangements on memory node should be more specific, how to manage data cross multiple memory nodes?</li><li>Can compute node fully cache learned index? LT &amp; SLT are also cached on Compute nodes? How to choose suitable δ and ε for Retraining-decoupled learned index?</li></ul><h1 id="strengths"><a class="markdownIt-Anchor" href="#strengths">#</a> Strengths</h1><ul><li>Decoupled retraining and insertion is innovative.</li><li>Experiments is well designed.</li></ul><h1 id="comments"><a class="markdownIt-Anchor" href="#comments">#</a> Comments</h1><p>In summary, this paper is well-motivated and addresses an important problem in the field of disaggregated memory systems. It significantly advances the state of the art by proposing innovative techniques for coalescing ordered KV stores. The paper’s key insights and technical contributions are credible and supported by experiments. From reading this paper, I learned about the challenges and potential solutions in designing scalable RDMA-oriented learned key-value stores. The paper establishes its context with prior work and accurately discusses relevant research. It is likely to have an impact on both theory and practice in the field.</p>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> paper-notes </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>有限自动机课程复习</title>
+      <link href="/2023/11/06/%E6%9C%89%E9%99%90%E8%87%AA%E5%8A%A8%E6%9C%BA%E8%AF%BE%E7%A8%8B%E5%A4%8D%E4%B9%A0/"/>
+      <url>/2023/11/06/%E6%9C%89%E9%99%90%E8%87%AA%E5%8A%A8%E6%9C%BA%E8%AF%BE%E7%A8%8B%E5%A4%8D%E4%B9%A0/</url>
+      
+        <content type="html"><![CDATA[<h1 id="有限自动机1116"><a class="markdownIt-Anchor" href="#有限自动机1116">#</a> 有限自动机 (11.16)</h1><p>Tags: 学位课</p><h1 id="chapter-1"><a class="markdownIt-Anchor" href="#chapter-1">#</a> Chapter 1</h1><p><code>P(x)</code>  谓词用来描述或判断一个集合中元素的具体性质</p><p><code>A - B</code>  属于集合 A 但不属于集合 B</p><p>A 的幂集是 A 的所有自己构成的集合</p><p>克林闭包</p><p>正闭包</p><h1 id="chapter-2"><a class="markdownIt-Anchor" href="#chapter-2">#</a> Chapter 2</h1><h2 id="形式语言经数学定义的语言"><a class="markdownIt-Anchor" href="#形式语言经数学定义的语言">#</a> 形式语言：经数学定义的语言</h2><p>巴斯克 - 诺尔范式：&lt;括号匹配串&gt;::=&lt; 括号匹配串 &gt;&lt; 括号匹配串 &gt;</p><p>乔姆斯基范式:  S→()</p><p><strong>S 称为非终结符，在推导过程中，可以被代替的符号。</strong></p><p><strong>(和) 称为终结符，在推导过程中，不可以被代替的符号</strong></p><p><strong>→ 是产生式系统的元符号，不属于终结符，也不属于非终结符</strong></p><p>e.g. 句子 **(())(( )( )) 的推导过程 **</p><pre><code>S→SS→(S)S→(())S→(())(S)→(())(SS)→(())(()S)→(())(()())</code></pre><h2 id="文法类型"><a class="markdownIt-Anchor" href="#文法类型">#</a> 文法类型</h2><h3 id="0型文法psg"><a class="markdownIt-Anchor" href="#0型文法psg">#</a> 0 型文法 (PSG)</h3><p>短语结构文法</p><p><strong>G = {VN , VT , P , S}, 如果它的每个产生式 α→β 都满足</strong></p><p><strong>α∈(VN∪VT)</strong>*&nbsp;且至少含有一个非终结符，而&nbsp;<strong>β∈(VN∪VT)</strong>*</p><h3 id="1型文法csg上下文相关文法"><a class="markdownIt-Anchor" href="#1型文法csg上下文相关文法">#</a> 1 型文法 (CSG 上下文相关文法)</h3><p>在 0 型文法的基础上加以限制，规定对于每一个 α→β，都必须满足 <strong>|α| &lt;= |β|</strong>。也就是说，产生式左部符号串长度必须小于等于右部符号串长度。这里要注意一个特例就是： α → ε，虽然左部长度一定大于右部长度，但它仍然符合 1 型文法。</p><h3 id="2型文法cfg上下文无关文法"><a class="markdownIt-Anchor" href="#2型文法cfg上下文无关文法">#</a> <strong>2 型文法 (CFG 上下文无关文法)</strong></h3><p>在 1 型文法的基础上加以限制，规定对于每一个 α→β，都必须满足 α 是一个非终结符。也就是说，产生式左部必须得是一个非终结符。</p><h3 id="3型文法rg"><a class="markdownIt-Anchor" href="#3型文法rg">#</a> 3 型文法 (RG)</h3><p>在 3 型文法的基础上加以限制，规定对于每一个 α→β，要么必须满足 A→ α | αB（右线性），要么必须满足 A→ α | Bα（左线性）。这里的 AB 代表非终极符号。</p><h3 id="递归文法"><a class="markdownIt-Anchor" href="#递归文法">#</a> 递归文法</h3><p><strong>直接递归：直接调用自身</strong></p><p>** 间接递归：** 间接调用自身，e.g. 调用另一个函数，该函数再调用自身。</p><h3 id="例题构造文法g产生语言w-w是实数6"><a class="markdownIt-Anchor" href="#例题构造文法g产生语言w-w是实数6">#</a> 例题：构造文法 G，产生语言 {w | w 是实数} 6</h3><p>解：</p><ol><li><p>S 代表实数，R 代表无符号实数，那么可以得到的第一个产生式</p><p>S→ R | +R | -R | 0</p></li><li><p>其中无符号实数 R 由无符号整数 (N)，无符号小数 (B)，无符号纯小数 (P) 构成</p><p>R→ N | B | P</p></li><li><p>其中 无符号小数 B 的产生式为</p><p>B→ N.D</p></li><li><p>其中无符号纯小数 P 的产生式为</p><p>P→0.D</p></li><li><p>接下来解决无符号整数 N 和小数 D 的产生式定义，首先对于无符号整数 N，不能以 0 开头，</p><p>那么可以得到以下产生式：</p><p>N→ AM</p><p>A→ 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9</p><p>M→ ε | 0M | 1M | 2M | 3M | 4M | 5M | 6M | 7M | 8M | 9M</p></li><li><p>对于小数部分 D，不能以 0 结尾</p><p>D→ 0 | MA</p></li></ol><p>因此得到完整的文法为</p><pre><code>S→ R | +R | -R | 0 R→ N | B | PB→ N.DP→0.DN→ AMA→ 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 M→ ε | 0M | 1M | 2M | 3M | 4M | 5M | 6M | 7M | 8M | 9MD→ 0 | MA</code></pre><h2 id="消除左递归"><a class="markdownIt-Anchor" href="#消除左递归">#</a> 消除左递归</h2><p>直接左递归的产生式为：<strong>A→Av</strong></p><p>一般左递归的产生式为：<strong>A→*Av</strong></p><h3 id="消除直接左递归"><a class="markdownIt-Anchor" href="#消除直接左递归">#</a> 消除直接左递归</h3><p>假设文法的 G 的产生式是 <strong>A→ Av | w</strong></p><p>将左递归转换为右递归，增加一个新的非终结符 B，构造无左递归文法</p><p>A→ wB | w   ， B→ vB | v</p><p>即可产生相同的语言并消除直接左递归。</p><p><strong>归纳总结消除直接左递归的一般情况：</strong></p><p>假设含左递归产生式为</p><p>A→ Av1 | Av2 | Av3 | … | Avn | w1 | w2 | w3 | … | wm</p><p>对于 A 有</p><p>A→ *(w1 | w2 | w3 | w4 | … | wm )( v1 | v2 | … | vn) *</p><p>则消除左递归可增加一个新的非终结符 B</p><p>A→ w1B | w2B | … | wmB | w1 | w2 | … | wm</p><p>B→ v1B | v2B | v3B | … | vnB | v1 | v2 | v3| … | vn</p><h3 id="消除间接左递归"><a class="markdownIt-Anchor" href="#消除间接左递归">#</a> 消除间接左递归</h3><p>排序代入并消除得到的直接左递归。</p>]]></content>
+      
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>First Blog</title>
       <link href="/2023/09/09/index/"/>
       <url>/2023/09/09/index/</url>
       
-        <content type="html"><![CDATA[<pre><code class="language-C++">#include &lt;iostream&gt;int main(){    std::cout&lt;&lt;"sadasd"&lt;&lt;std::endl;}</code></pre><p><img src="/images/21.jpg" alt=""></p><p>change cname test</p><p>test2</p>]]></content>
+        <content type="html"><![CDATA[<p>Hexo 常用命令</p><pre><code class="language-BASH">hexo new "artical title"hexo d # 部署hexo g # 生成hexo s # 生成本地server 预览</code></pre>]]></content>
       
       
       <categories>
