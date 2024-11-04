@@ -1,20 +1,22 @@
-(function() {
+(function () {
     // eslint-disable-next-line no-unused-vars
     let pjax;
 
     function initPjax() {
         try {
-            const Pjax = window.Pjax || function() {};
+            const Pjax = window.Pjax || function () { };
             pjax = new Pjax({
                 selectors: [
+                    '[data-pjax]',
                     'head title',
                     '.columns',
                     '.navbar-start',
                     '.navbar-end',
                     '.searchbox',
+                    '.pjax-reload',
                     '#back-to-top',
-                    '[data-pjax]',
-                    '.pjax-reload'
+                    '#comments link',
+                    '#comments script',
                 ]
             });
         } catch (e) {

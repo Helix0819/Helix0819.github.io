@@ -6,7 +6,7 @@
   <link href="https://helix0819.github.io/atom.xml" rel="self"/>
   
   <link href="https://helix0819.github.io/"/>
-  <updated>2024-11-04T12:17:22.587Z</updated>
+  <updated>2024-11-04T12:19:32.581Z</updated>
   <id>https://helix0819.github.io/</id>
   
   <author>
@@ -15,19 +15,6 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
-  
-  <entry>
-    <title>test</title>
-    <link href="https://helix0819.github.io/2024/11/04/test/"/>
-    <id>https://helix0819.github.io/2024/11/04/test/</id>
-    <published>2024-11-04T12:17:22.000Z</published>
-    <updated>2024-11-04T12:17:22.587Z</updated>
-    
-    
-    
-    
-    
-  </entry>
   
   <entry>
     <title>Git源码解析-环境搭建</title>
