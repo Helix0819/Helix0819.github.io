@@ -1,7 +1,7 @@
 
 
 <!DOCTYPE html>
-<html lang="zh-CN" data-default-color-scheme=auto>
+<html lang="zh-CN" data-default-color-scheme=light>
 
 
 
@@ -15,7 +15,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   
-  <meta name="theme-color" content="#2f4154">
+  <meta name="theme-color" content="#000000">
   <meta name="author" content="Helix">
   <meta name="keywords" content="">
   
@@ -26,13 +26,13 @@
 <meta property="og:site_name" content="Arcanus">
 <meta property="og:description" content="Why? How?Why?做这件事的起因是在和导师做的一篇论文想去argue一个场景，场景下涉及到去了解git的delta compression机制，所以这个系列的文章核心是弄清楚git的压缩相关机制，当然如果工作流有涉及那么也会一起研究下。">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://raw.githubusercontent.com/Helix0819/resources/master/20241108150148.png">
+<meta property="og:image" content="https://picbed-1300534156.cos.ap-chengdu.myqcloud.com/img/20241109134232.png">
 <meta property="article:published_time" content="2024-11-03T09:53:13.000Z">
-<meta property="article:modified_time" content="2024-11-08T07:01:59.672Z">
+<meta property="article:modified_time" content="2024-11-09T05:43:28.528Z">
 <meta property="article:author" content="Helix">
 <meta property="article:tag" content="git">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://raw.githubusercontent.com/Helix0819/resources/master/20241108150148.png">
+<meta name="twitter:image" content="https://picbed-1300534156.cos.ap-chengdu.myqcloud.com/img/20241109134232.png">
   
   
   
@@ -203,7 +203,7 @@
   
 
 <div id="banner" class="banner" parallax=true
-     style="background: url('/img/default2.jpg') no-repeat center center; background-size: cover;">
+     style="background: url('https://picbed-1300534156.cos.ap-chengdu.myqcloud.com/img/thumb-1920-1182654.jpg') no-repeat center center; background-size: cover;">
   <div class="full-bg-img">
     <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
       <div class="banner-text text-center fade-in-up">
@@ -305,7 +305,7 @@
 <h3 id="6-修改代码验证"><a href="#6-修改代码验证" class="headerlink" title="6. 修改代码验证"></a>6. 修改代码验证</h3><p>这里我们在 <code>git.c</code>中的 cmd_main函数中加一句输出(git的程序入口)</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">int</span> <span class="hljs-title function_">cmd_main</span><span class="hljs-params">(<span class="hljs-type">int</span> argc, <span class="hljs-type">const</span> <span class="hljs-type">char</span> **argv)</span><br>&#123;<br>    <span class="hljs-comment">// ...</span><br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;This is mygit building.\n&quot;</span>);<br>    <span class="hljs-comment">// ...</span><br>&#125;<br></code></pre></td></tr></table></figure>
 
-<p>编译并在任意空目录使用mygit创建一个new repo<br><img src="https://cdn.jsdelivr.net/gh/helix0819/resources/images/1-1.png" srcset="/img/loading.gif" lazyload><br>证明环境搭建成功。</p>
+<p>编译并在任意空目录使用mygit创建一个new repo<br><img src="https://picbed-1300534156.cos.ap-chengdu.myqcloud.com/img/20241109134323.png" srcset="/img/loading.gif" lazyload><br>证明环境搭建成功。</p>
 
                 
               </div>
