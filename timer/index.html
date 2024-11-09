@@ -19,17 +19,21 @@
   <meta name="author" content="Helix">
   <meta name="keywords" content="">
   
-    <meta property="og:type" content="website">
-<meta property="og:title" content="分类 - learning">
-<meta property="og:url" content="https://helix0819.github.io/categories/learning/index.html">
+    <meta name="description" content="#timers {     display: flex;     flex-wrap: wrap;     justify-content: center;     font-family: &#39;Arial&#39;, sans-serif;     perspective: 1000px; &#x2F;* 提供3D空间感 *&#x2F;     }      .timer {     margin: 10px;">
+<meta property="og:type" content="website">
+<meta property="og:title" content="重要事件计时">
+<meta property="og:url" content="https://helix0819.github.io/timer/index.html">
 <meta property="og:site_name" content="Arcanus">
+<meta property="og:description" content="#timers {     display: flex;     flex-wrap: wrap;     justify-content: center;     font-family: &#39;Arial&#39;, sans-serif;     perspective: 1000px; &#x2F;* 提供3D空间感 *&#x2F;     }      .timer {     margin: 10px;">
 <meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-10-01T04:00:00.000Z">
+<meta property="article:modified_time" content="2024-11-09T13:16:25.230Z">
 <meta property="article:author" content="Helix">
 <meta name="twitter:card" content="summary_large_image">
   
   
   
-  <title>分类 - learning - Arcanus</title>
+  <title>重要事件计时 - Arcanus</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -208,7 +212,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="分类 - learning"></span>
+            <span id="subtitle" data-typed-text="重要事件计时"></span>
           
         </div>
 
@@ -235,29 +239,147 @@
               <div class="col-12 col-md-10 m-auto">
                 
 
-<div class="list-group">
-  <p class="h4">共计 2 篇文章</p>
-  <hr>
-  
-  
-    
-      
-      <p class="h5">2024</p>
-    
-    <a href="/2024/11/03/git%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90-%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/" class="list-group-item list-group-item-action">
-      <time>11-03</time>
-      <div class="list-group-item-title">Git源码解析-环境搭建</div>
-    </a>
-  
-    
-    <a href="/2024/04/03/hello-world/" class="list-group-item list-group-item-action">
-      <time>04-03</time>
-      <div class="list-group-item-title">Hello World</div>
-    </a>
-  
-</div>
+<article class="page-content">
+  <style>
+    #timers {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    font-family: 'Arial', sans-serif;
+    perspective: 1000px; /* 提供3D空间感 */
+    }
 
+    .timer {
+    margin: 10px;
+    padding: 20px;
+    border-radius: 10px;
+    background-color: #fafafa;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    text-align: center;
+    width: 250px;
+    height: 150px; /* 增加高度以更好展示3D效果 */
+    position: relative;
+    transform-style: preserve-3d; /* 允许3D转换 */
+    transform: rotateX(0deg) rotateY(0deg);
+    cursor: pointer;
+    }
 
+    /* 翻转效果 */
+    .timer:hover {
+    transform: rotateX(15deg) rotateY(-15deg);
+    box-shadow: 5px 5px 20px rgba(0,0,0,0.2);
+    }
+
+    .timer h2 {
+    color: #555;
+    margin-top: 20px;
+    }
+
+    .timer .time {
+    color: #7f8c8d;
+    font-size: 1.5em;
+    font-weight: normal;
+    display: block;
+    margin-top: 10px;
+    }
+
+    /* 心形图标 */
+    .timer::before {
+    content: '\2665';
+    position: absolute;
+    top: 20px;
+    left: 10%;
+    transform: translateX(-50%) translateY(-50%);
+    font-size: 3em;
+    color: #e74c3c;
+    opacity: 0.7;
+    z-index: 2;
+    transition: all 0.3s ease;
+    }
+
+    .timer:hover::before {
+    transform: translateX(-50%) translateY(-50%) scale(1.2);
+    }
+
+    /* 增加阴影和深度感 */
+    .timer::after {
+    content: '';
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    right: 10px;
+    bottom: 10px;
+    border-radius: 10px;
+    box-shadow: inset 0 0 10px rgba(0,0,0,0.1);
+    z-index: -1;
+    transform: translateZ(-10px); /* 向后移动，增加深度感 */
+    }
+</style>
+
+<div id="timers"></div>
+
+<script>
+function getTimeRemaining(endtime) {
+    var t = Date.parse(endtime) - Date.parse(new Date());
+    var seconds = Math.floor((t / 1000) % 60);
+    var minutes = Math.floor((t / 1000 / 60) % 60);
+    var hours = Math.floor((t / (1000 * 60 * 60)) % 24);
+    var days = Math.floor(t / (1000 * 60 * 60 * 24));
+    return {
+        'total': t,
+        'days': days,
+        'hours': hours,
+        'minutes': minutes,
+        'seconds': seconds
+    };
+}
+
+function initializeClock(id, endtime) {
+    var clock = document.getElementById(id);
+    var eventName = clock.dataset.event;
+    var type = clock.dataset.type;
+
+    function updateClock() {
+        var t = getTimeRemaining(endtime);
+        var timeDisplay = '';
+        if (t.total >= 0) {
+            timeDisplay = `${t.days}d ${t.hours}h ${t.minutes}m ${t.seconds}s`;
+        } else {
+            t = getTimeRemaining(new Date(endtime)); // Get the time since the event
+            timeDisplay = `${-t.days}d ${-t.hours}h ${-t.minutes}m ${-t.seconds}s`;
+        }
+        
+        clock.innerHTML = `<h2>${eventName}</h2><span class="time ${t.total >= 0 ? 'countdown' : 'passed'}">${timeDisplay}</span>`;
+    }
+
+    updateClock(); // Run once at initialization
+    setInterval(updateClock, 1000);
+}
+
+// List of important events with their end dates
+var events = [
+    {name: "阮河和云加", date: "2024-05-06T00:00:00", type: "countdown"},
+    {name: "下次见面还有", date: "2024-11-13T11:30:00", type: "countdown"},
+    // Add more events here
+];
+
+// Create a div for each event
+var timersDiv = document.getElementById('timers');
+events.forEach(function(event) {
+    var div = document.createElement('div');
+    div.className = 'timer';
+    div.setAttribute('id', 'timer-' + event.name.replace(/[^a-zA-Z0-9]/g, '-'));
+    div.setAttribute('data-event', event.name);
+    div.setAttribute('data-type', event.type);
+    timersDiv.appendChild(div);
+    initializeClock(div.id, event.date);
+});
+</script>
+
+  
+
+</article>
 
 
 
