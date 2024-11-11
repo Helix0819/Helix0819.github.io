@@ -4,6 +4,33 @@
   
   
   <entry>
+    <title>Linux File System (abstract)</title>
+    <link href="/2024/11/11/Linux-File-System/"/>
+    <url>/2024/11/11/Linux-File-System/</url>
+    
+    <content type="html"><![CDATA[<p>这个系列的讲座主要是学习陈硕大佬的<a href="https://space.bilibili.com/1356949475/channel/collectiondetail?sid=1211802">Linux文件系统系列视频</a>，补充自己在文件系统部分知识的欠缺。</p><p>Kenneth Lane Thompson 在文件系统的基础上用了三周分别实现了一个editor、assembler和shell实现了操作系统Unix。可见现代Linux系统中一切皆文件的哲学其实来源于此，并不是说先有操作系统，再为其设计文件系统，而是恰恰相反现有文件系统，在此基础上搭建操作系统，可见文件系统的重要性。<br><img src="https://picbed-1300534156.cos.ap-chengdu.myqcloud.com/img/20241111163350.png"></p><p>文件的内容由用户决定，而不是为文件预定义类型。<br>10个最核心的系统调用：</p><ul><li>open&#x2F;close&#x2F;(create)： 打开，关闭文件。</li><li>read&#x2F;write&#x2F;lseek：支持读、写、随机读写。</li><li>fstat&#x2F;ftruncate：返回文件元数据、截断文件</li><li>unlink&#x2F;mkdir&#x2F;dup…：减少引用计数、创建目录、复制文件操作符<br>这些系统调用和文件定义抽象了文件这个概念。<br><img src="https://picbed-1300534156.cos.ap-chengdu.myqcloud.com/img/20241111163650.png"></li></ul><p>接下来就是文件系统，其实抽象出来就是文件名到文件内容的映射。<br><img src="https://picbed-1300534156.cos.ap-chengdu.myqcloud.com/img/20241111164242.png"></p><p>Unix文件系统对文件系统有更具体的抽象，其中最核心的概念就是inode。inode是文件名和文件内容的一个桥梁。<br>重要变量：</p><ul><li><code>typedef uint32_t inode_num_t</code>实际上规定了文件系统最多可以有多少个文件，相当于一个主键。</li><li><code>Map&lt;string, inode_num_t&gt; dirs</code> 从文件路径到inode的映射</li><li><code>Map&lt;inode_num_t, string&gt; files</code> inode到文件内容的映射<br><img src="https://picbed-1300534156.cos.ap-chengdu.myqcloud.com/img/20241111203614.png"><br>— DONE HERE —<br>块设备<br><img src="https://picbed-1300534156.cos.ap-chengdu.myqcloud.com/img/20241111212710.png"></li></ul>]]></content>
+    
+    
+    <categories>
+      
+      <category>learning</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>file system</tag>
+      
+      <tag>linux</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>FastCommit论文精读</title>
     <link href="/2024/11/05/FastCommit%E8%AE%BA%E6%96%87%E7%B2%BE%E8%AF%BB/"/>
     <url>/2024/11/05/FastCommit%E8%AE%BA%E6%96%87%E7%B2%BE%E8%AF%BB/</url>
