@@ -21,14 +21,14 @@
   
     <meta name="description" content="这个系列的讲座主要是学习陈硕大佬的Linux文件系统系列视频，补充自己在文件系统部分知识的欠缺。 Kenneth Lane Thompson 在文件系统的基础上用了三周分别实现了一个editor、assembler和shell实现了操作系统Unix。可见现代Linux系统中一切皆文件的哲学其实来源于此，并不是说先有操作系统，再为其设计文件系统，而是恰恰相反现有文件系统，在此基础上搭建操作系统，可见">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Linux File System (abstract)">
+<meta property="og:title" content="Linux File System (Abstract)">
 <meta property="og:url" content="https://helix0819.github.io/2024/11/11/Linux-File-System/index.html">
 <meta property="og:site_name" content="Arcanus">
 <meta property="og:description" content="这个系列的讲座主要是学习陈硕大佬的Linux文件系统系列视频，补充自己在文件系统部分知识的欠缺。 Kenneth Lane Thompson 在文件系统的基础上用了三周分别实现了一个editor、assembler和shell实现了操作系统Unix。可见现代Linux系统中一切皆文件的哲学其实来源于此，并不是说先有操作系统，再为其设计文件系统，而是恰恰相反现有文件系统，在此基础上搭建操作系统，可见">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://picbed-1300534156.cos.ap-chengdu.myqcloud.com/img/20241111162400.png">
 <meta property="article:published_time" content="2024-11-11T08:22:16.000Z">
-<meta property="article:modified_time" content="2024-11-11T13:27:23.339Z">
+<meta property="article:modified_time" content="2024-11-12T00:40:50.899Z">
 <meta property="article:author" content="Helix">
 <meta property="article:tag" content="file system">
 <meta property="article:tag" content="linux">
@@ -37,7 +37,7 @@
   
   
   
-  <title>Linux File System (abstract) - Arcanus</title>
+  <title>Linux File System (Abstract) - Arcanus</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -222,7 +222,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="Linux File System (abstract)"></span>
+            <span id="subtitle" data-typed-text="Linux File System (Abstract)"></span>
           
         </div>
 
@@ -245,7 +245,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          392 字
+          443 字
         
       </span>
     
@@ -293,7 +293,7 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">Linux File System (abstract)</h1>
+            <h1 id="seo-header">Linux File System (Abstract)</h1>
             
             
               <div class="markdown-body">
@@ -312,8 +312,10 @@
 <ul>
 <li><code>typedef uint32_t inode_num_t</code>实际上规定了文件系统最多可以有多少个文件，相当于一个主键。</li>
 <li><code>Map&lt;string, inode_num_t&gt; dirs</code> 从文件路径到inode的映射</li>
-<li><code>Map&lt;inode_num_t, string&gt; files</code> inode到文件内容的映射<br><img src="https://picbed-1300534156.cos.ap-chengdu.myqcloud.com/img/20241111203614.png" srcset="/img/loading.gif" lazyload><br>— DONE HERE —<br>块设备<br><img src="https://picbed-1300534156.cos.ap-chengdu.myqcloud.com/img/20241111212710.png" srcset="/img/loading.gif" lazyload></li>
+<li><code>Map&lt;inode_num_t, string&gt; files</code> inode到文件内容的映射<br><img src="https://picbed-1300534156.cos.ap-chengdu.myqcloud.com/img/20241111203614.png" srcset="/img/loading.gif" lazyload></li>
 </ul>
+<p>块设备, 现在的机械硬盘大部分以4KiB为一个块单位。（只能按照1KiB或4KiB访问）<br><img src="https://picbed-1300534156.cos.ap-chengdu.myqcloud.com/img/20241111212710.png" srcset="/img/loading.gif" lazyload></p>
+<p>文件系统的功能实际上是把块设备”变“为一系列操作文件的API。<br><img src="https://picbed-1300534156.cos.ap-chengdu.myqcloud.com/img/20241112083807.png" srcset="/img/loading.gif" lazyload></p>
 
                 
               </div>
@@ -361,7 +363,7 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>Linux File System (abstract)</div>
+      <div>Linux File System (Abstract)</div>
       <div>https://helix0819.github.io/2024/11/11/Linux-File-System/</div>
     </div>
     <div class="license-meta">
@@ -426,29 +428,26 @@
   
     <article id="comments" lazyload>
       
+  <div id="waline"></div>
   <script type="text/javascript">
-    Fluid.utils.loadComments('#comments', function() {
-      var light = 'github-light';
-      var dark = 'github-dark';
-      var schema = document.documentElement.getAttribute('data-user-color-scheme');
-      if (schema === 'dark') {
-        schema = dark;
-      } else {
-        schema = light;
-      }
-      window.UtterancesThemeLight = light;
-      window.UtterancesThemeDark = dark;
-      var s = document.createElement('script');
-      s.setAttribute('src', 'https://utteranc.es/client.js');
-      s.setAttribute('repo', 'Helix0819/Helix0819.github.io');
-      s.setAttribute('issue-term', 'pathname');
-      
-      s.setAttribute('label', 'utterances');
-      
-      s.setAttribute('theme', schema);
-      s.setAttribute('crossorigin', 'anonymous');
-      document.getElementById('comments').appendChild(s);
-    })
+    Fluid.utils.loadComments('#waline', function() {
+      Fluid.utils.createCssLink('https://registry.npmmirror.com/@waline/client/2.15.8/files/dist/waline.css')
+      Fluid.utils.createScript('https://registry.npmmirror.com/@waline/client/2.15.8/files/dist/waline.js', function() {
+        var options = Object.assign(
+          {"serverURL":"https://comment-zqb5s87p5-helix0819s-projects.vercel.app/","path":"window.location.pathname","placeholder":"leave your comments","meta":["nick","mail","link"],"requiredMeta":["nick"],"lang":"zh-CN","emoji":["https://cdn.jsdelivr.net/gh/walinejs/emojis/weibo"],"dark":"html[data-user-color-scheme=\"dark\"]","wordLimit":0,"pageSize":10},
+          {
+            el: '#waline',
+            path: window.location.pathname
+          }
+        )
+        Waline.init(options);
+        Fluid.utils.waitElementVisible('#waline .vcontent', () => {
+          var imgSelector = '#waline .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
   </script>
   <noscript>Please enable JavaScript to view the comments</noscript>
 
