@@ -28,7 +28,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://picbed-1300534156.cos.ap-chengdu.myqcloud.com/img/20241109133958.png">
 <meta property="article:published_time" content="2024-11-05T01:22:50.000Z">
-<meta property="article:modified_time" content="2024-11-12T02:54:47.904Z">
+<meta property="article:modified_time" content="2024-11-17T11:36:46.994Z">
 <meta property="article:author" content="Helix">
 <meta property="article:tag" content="JBD2">
 <meta property="article:tag" content="Journaling">
@@ -489,7 +489,7 @@
 <p>以JBD2为例，JBD2首先用写入实际数据和文件操作设计的元数据，为了确保数据全部持久化就需要一次flush，之后还需要写一个commit block来标志这个commit结束，但这里不需要flush而是用一个FUA跳过页缓存直接写入磁盘。但注意FUA一次只能写入一个block。</p>
 <p>我的理解是，FastCommit设计的FCLog大部分情况下都可以容纳进一个block里面，那么就可以直接用FUA写入从而避免flush的时间，对于那些无法用logical journal的情况就退回到JBD2的机制，所以叫做selective flushing。</p>
 <h2 id="Inline-Jounarling"><a href="#Inline-Jounarling" class="headerlink" title="Inline Jounarling"></a>Inline Jounarling</h2><p>这里感觉论文写的并不是很清楚，大概意思是说FastCommit可以把journal做的很小，然后就不需要切换到JBD2的线程来进行commit，因此少了俩次上下文切换的开销，换来了一些吞吐量。</p>
-<h1 id="Evaluation"><a href="#Evaluation" class="headerlink" title="Evaluation"></a>Evaluation</h1>
+
                 
               </div>
             
@@ -615,7 +615,7 @@
       Fluid.utils.createCssLink('https://registry.npmmirror.com/@waline/client/2.15.8/files/dist/waline.css')
       Fluid.utils.createScript('https://registry.npmmirror.com/@waline/client/2.15.8/files/dist/waline.js', function() {
         var options = Object.assign(
-          {"serverURL":"https://comment.arcanus.red/","path":"window.location.pathname","placeholder":"leave your comments","meta":["nick","mail","link"],"requiredMeta":["nick"],"lang":"zh-CN","emoji":["https://cdn.jsdelivr.net/gh/walinejs/emojis/weibo"],"dark":"html[data-user-color-scheme=\"dark\"]","wordLimit":0,"pageSize":10},
+          {"serverURL":"https://comment.arcanus.red/","path":"window.location.pathname","placeholder":"leave your comments","meta":["nick","mail","link"],"requiredMeta":["nick"],"lang":"zh-CN","emoji":["https://npm.elemecdn.com/@waline/emojis@1.1.0/bmoji","https://npm.elemecdn.com/@waline/emojis@1.1.0/bilibili","https://npm.elemecdn.com/@waline/emojis@1.1.0/weibo"],"reaction":["https://npm.elemecdn.com/@waline/emojis@1.1.0/bilibili/bb_heart_eyes.png","https://npm.elemecdn.com/@waline/emojis@1.1.0/bilibili/bb_thumbsup.png","https://npm.elemecdn.com/@waline/emojis@1.1.0/bilibili/bb_zhoumei.png","https://npm.elemecdn.com/@waline/emojis@1.1.0/bilibili/bb_grievance.png","https://npm.elemecdn.com/@waline/emojis@1.1.0/bilibili/bb_dizzy_face.png","https://npm.elemecdn.com/@waline/emojis@1.1.0/bilibili/bb_slap.png"],"dark":"html[data-user-color-scheme=\"dark\"]","wordLimit":0,"pageSize":10,"search":false},
           {
             el: '#waline',
             path: window.location.pathname
