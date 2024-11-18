@@ -19,16 +19,16 @@
   <meta name="author" content="Helix">
   <meta name="keywords" content="">
   
-    <meta name="description" content="这个系列的讲座主要是学习陈硕大佬的Linux文件系统系列视频，补充自己在文件系统部分知识的欠缺。 Kenneth Lane Thompson 在文件系统的基础上用了三周分别实现了一个editor、assembler和shell实现了操作系统Unix。可见现代Linux系统中一切皆文件的哲学其实来源于此，并不是说先有操作系统，再为其设计文件系统，而是恰恰相反现有文件系统，在此基础上搭建操作系统，可见">
+    <meta name="description" content="本节主要介绍磁盘的结构首先Disk是由磁道、扇区和磁头几个部分组成的，柱面其实是一个逻辑概念，是指某一个磁道在所有盘面上的位置构成的一个抽象的柱面。一些参数的含义：  7200PRM：7200转每分钟  120Hz：一秒钟120转 转一圈是8.33ms 旋转延迟：把磁头移到指定扇区所耗时间的平均值。 seek time：移动磁头的时间（很多年没有优化过了）  寻道时间是可以去优化的，比如电梯算法、">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Linux File System (Abstract)">
-<meta property="og:url" content="https://helix0819.github.io/2024/11/11/Linux-File-System/index.html">
+<meta property="og:title" content="Linux File System (Disk)">
+<meta property="og:url" content="https://helix0819.github.io/2024/11/12/Linux-File-System-Disk/index.html">
 <meta property="og:site_name" content="Arcanus">
-<meta property="og:description" content="这个系列的讲座主要是学习陈硕大佬的Linux文件系统系列视频，补充自己在文件系统部分知识的欠缺。 Kenneth Lane Thompson 在文件系统的基础上用了三周分别实现了一个editor、assembler和shell实现了操作系统Unix。可见现代Linux系统中一切皆文件的哲学其实来源于此，并不是说先有操作系统，再为其设计文件系统，而是恰恰相反现有文件系统，在此基础上搭建操作系统，可见">
+<meta property="og:description" content="本节主要介绍磁盘的结构首先Disk是由磁道、扇区和磁头几个部分组成的，柱面其实是一个逻辑概念，是指某一个磁道在所有盘面上的位置构成的一个抽象的柱面。一些参数的含义：  7200PRM：7200转每分钟  120Hz：一秒钟120转 转一圈是8.33ms 旋转延迟：把磁头移到指定扇区所耗时间的平均值。 seek time：移动磁头的时间（很多年没有优化过了）  寻道时间是可以去优化的，比如电梯算法、">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://picbed-1300534156.cos.ap-chengdu.myqcloud.com/img/20241111162400.png">
-<meta property="article:published_time" content="2024-11-11T08:22:16.000Z">
-<meta property="article:modified_time" content="2024-11-17T05:34:05.341Z">
+<meta property="article:published_time" content="2024-11-12T00:40:53.000Z">
+<meta property="article:modified_time" content="2024-11-18T12:14:02.481Z">
 <meta property="article:author" content="Helix">
 <meta property="article:tag" content="file system">
 <meta property="article:tag" content="linux">
@@ -37,7 +37,7 @@
   
   
   
-  <title>Linux File System (Abstract) - Arcanus</title>
+  <title>Linux File System (Disk) - Arcanus</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -222,7 +222,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="Linux File System (Abstract)"></span>
+            <span id="subtitle" data-typed-text="Linux File System (Disk)"></span>
           
         </div>
 
@@ -233,8 +233,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2024-11-11 16:22" pubdate>
-          2024年11月11日 下午
+        <time datetime="2024-11-12 08:40" pubdate>
+          2024年11月12日 早上
         </time>
       </span>
     
@@ -245,7 +245,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          443 字
+          532 字
         
       </span>
     
@@ -256,7 +256,7 @@
         
         
         
-          4 分钟
+          5 分钟
         
       </span>
     
@@ -293,29 +293,32 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">Linux File System (Abstract)</h1>
+            <h1 id="seo-header">Linux File System (Disk)</h1>
             
             
               <div class="markdown-body">
                 
-                <p>这个系列的讲座主要是学习陈硕大佬的<a target="_blank" rel="noopener" href="https://space.bilibili.com/1356949475/channel/collectiondetail?sid=1211802">Linux文件系统系列视频</a>，补充自己在文件系统部分知识的欠缺。</p>
-<p>Kenneth Lane Thompson 在文件系统的基础上用了三周分别实现了一个editor、assembler和shell实现了操作系统Unix。可见现代Linux系统中一切皆文件的哲学其实来源于此，并不是说先有操作系统，再为其设计文件系统，而是恰恰相反现有文件系统，在此基础上搭建操作系统，可见文件系统的重要性。<br><img src="https://picbed-1300534156.cos.ap-chengdu.myqcloud.com/img/20241111163350.png" srcset="/img/loading.gif" lazyload></p>
-<p>文件的内容由用户决定，而不是为文件预定义类型。<br>10个最核心的系统调用：</p>
+                <p>本节主要介绍磁盘的结构<br>首先Disk是由磁道、扇区和磁头几个部分组成的，柱面其实是一个逻辑概念，是指某一个磁道在所有盘面上的位置构成的一个抽象的柱面。<br>一些参数的含义：</p>
 <ul>
-<li>open&#x2F;close&#x2F;(create)： 打开，关闭文件。</li>
-<li>read&#x2F;write&#x2F;lseek：支持读、写、随机读写。</li>
-<li>fstat&#x2F;ftruncate：返回文件元数据、截断文件</li>
-<li>unlink&#x2F;mkdir&#x2F;dup…：减少引用计数、创建目录、复制文件操作符<br>这些系统调用和文件定义抽象了文件这个概念。<br><img src="https://picbed-1300534156.cos.ap-chengdu.myqcloud.com/img/20241111163650.png" srcset="/img/loading.gif" lazyload></li>
+<li>7200PRM：7200转每分钟 </li>
+<li>120Hz：一秒钟120转</li>
+<li>转一圈是8.33ms</li>
+<li>旋转延迟：把磁头移到指定扇区所耗时间的平均值。</li>
+<li>seek time：移动磁头的时间（很多年没有优化过了）</li>
 </ul>
-<p>接下来就是文件系统，其实抽象出来就是文件名到文件内容的映射。<br><img src="https://picbed-1300534156.cos.ap-chengdu.myqcloud.com/img/20241111164242.png" srcset="/img/loading.gif" lazyload></p>
-<p>Unix文件系统对文件系统有更具体的抽象，其中最核心的概念就是inode。inode是文件名和文件内容的一个桥梁。<br>重要变量：</p>
+<p>寻道时间是可以去优化的，比如电梯算法、本地命令重排等<br><img src="https://picbed-1300534156.cos.ap-chengdu.myqcloud.com/img/20241118171238.png" srcset="/img/loading.gif" lazyload></p>
+<p><strong>简单了解一下本地命令重排（NCQ）</strong><br>NCQ（Native Command Queuing）是一种硬盘内置的I&#x2F;O优化技术。它允许硬盘控制器同时接收多个读写命令，并对这些命令进行智能重新排序，以获得最优的执行顺序。</p>
+<p>主要工作原理：</p>
+<p>硬盘缓存多个I&#x2F;O请求<br>分析这些请求的物理位置关系<br>重新安排执行顺序，最小化磁头移动距离<br>减少寻道时间和旋转延迟<br>这项技术主要用于提升机械硬盘的随机读写性能，特别是在多线程高并发访问场景下。</p>
+<p>可以看出机械硬盘的吞吐量和磁头所在位置相关，靠外侧吞吐量高一些，内侧低一点。下面这张图的盘面都是25寸的。<br><img src="https://picbed-1300534156.cos.ap-chengdu.myqcloud.com/img/20241118191311.png" srcset="/img/loading.gif" lazyload></p>
+<p>对比一下盘面大小不同，转速相同，所以盘面大的线速度肯定快一些，自然吞吐量就高，盘面小的反之。<br><img src="https://picbed-1300534156.cos.ap-chengdu.myqcloud.com/img/20241118191727.png" srcset="/img/loading.gif" lazyload></p>
+<p>磁盘故障率和磁盘错误率</p>
 <ul>
-<li><code>typedef uint32_t inode_num_t</code>实际上规定了文件系统最多可以有多少个文件，相当于一个主键。</li>
-<li><code>Map&lt;string, inode_num_t&gt; dirs</code> 从文件路径到inode的映射</li>
-<li><code>Map&lt;inode_num_t, string&gt; files</code> inode到文件内容的映射<br><img src="https://picbed-1300534156.cos.ap-chengdu.myqcloud.com/img/20241111203614.png" srcset="/img/loading.gif" lazyload></li>
+<li>故障率：表示硬盘完全失效或不可恢复损坏的概率</li>
+<li>错误率：表示数据读写过程中出现位错误的概率</li>
 </ul>
-<p>块设备, 现在的机械硬盘大部分以4KiB为一个块单位。（只能按照1KiB或4KiB访问）<br><img src="https://picbed-1300534156.cos.ap-chengdu.myqcloud.com/img/20241111212710.png" srcset="/img/loading.gif" lazyload></p>
-<p>文件系统的功能实际上是把块设备”变“为一系列操作文件的API。<br><img src="https://picbed-1300534156.cos.ap-chengdu.myqcloud.com/img/20241112083807.png" srcset="/img/loading.gif" lazyload></p>
+<p>磁盘的故障率还是比我理解的高很多的。包括磁盘本身和他的controller的故障率。<br><img src="https://picbed-1300534156.cos.ap-chengdu.myqcloud.com/img/20241118201020.png" srcset="/img/loading.gif" lazyload></p>
+<p>总的来说这节就是比较high level的介绍了磁盘的各种特性和一些指标，为后面介绍文件系统设计做了铺垫。</p>
 
                 
               </div>
@@ -363,8 +366,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>Linux File System (Abstract)</div>
-      <div>https://helix0819.github.io/2024/11/11/Linux-File-System/</div>
+      <div>Linux File System (Disk)</div>
+      <div>https://helix0819.github.io/2024/11/12/Linux-File-System-Disk/</div>
     </div>
     <div class="license-meta">
       
@@ -376,7 +379,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2024年11月11日</div>
+          <div>2024年11月12日</div>
         </div>
       
       
@@ -408,18 +411,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2024/11/12/Linux-File-System-Disk/" title="Linux File System (Disk)">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">Linux File System (Disk)</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2024/11/05/FastCommit%E8%AE%BA%E6%96%87%E7%B2%BE%E8%AF%BB/" title="FastCommit论文精读">
-                        <span class="hidden-mobile">FastCommit论文精读</span>
+                      <a href="/2024/11/11/Linux-File-System/" title="Linux File System (Abstract)">
+                        <span class="hidden-mobile">Linux File System (Abstract)</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>

@@ -6,7 +6,7 @@
   <link href="https://helix0819.github.io/atom.xml" rel="self"/>
   
   <link href="https://helix0819.github.io/"/>
-  <updated>2024-11-17T05:34:05.341Z</updated>
+  <updated>2024-11-18T12:14:02.481Z</updated>
   <id>https://helix0819.github.io/</id>
   
   <author>
@@ -15,6 +15,35 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Linux File System (Disk)</title>
+    <link href="https://helix0819.github.io/2024/11/12/Linux-File-System-Disk/"/>
+    <id>https://helix0819.github.io/2024/11/12/Linux-File-System-Disk/</id>
+    <published>2024-11-12T00:40:53.000Z</published>
+    <updated>2024-11-18T12:14:02.481Z</updated>
+    
+    <content type="html"><![CDATA[<p>本节主要介绍磁盘的结构<br>首先Disk是由磁道、扇区和磁头几个部分组成的，柱面其实是一个逻辑概念，是指某一个磁道在所有盘面上的位置构成的一个抽象的柱面。<br>一些参数的含义：</p><ul><li>7200PRM：7200转每分钟 </li><li>120Hz：一秒钟120转</li><li>转一圈是8.33ms</li><li>旋转延迟：把磁头移到指定扇区所耗时间的平均值。</li><li>seek time：移动磁头的时间（很多年没有优化过了）</li></ul><p>寻道时间是可以去优化的，比如电梯算法、本地命令重排等<br><img src="https://picbed-1300534156.cos.ap-chengdu.myqcloud.com/img/20241118171238.png"></p><p><strong>简单了解一下本地命令重排（NCQ）</strong><br>NCQ（Native Command Queuing）是一种硬盘内置的I&#x2F;O优化技术。它允许硬盘控制器同时接收多个读写命令，并对这些命令进行智能重新排序，以获得最优的执行顺序。</p><p>主要工作原理：</p><p>硬盘缓存多个I&#x2F;O请求<br>分析这些请求的物理位置关系<br>重新安排执行顺序，最小化磁头移动距离<br>减少寻道时间和旋转延迟<br>这项技术主要用于提升机械硬盘的随机读写性能，特别是在多线程高并发访问场景下。</p><p>可以看出机械硬盘的吞吐量和磁头所在位置相关，靠外侧吞吐量高一些，内侧低一点。下面这张图的盘面都是25寸的。<br><img src="https://picbed-1300534156.cos.ap-chengdu.myqcloud.com/img/20241118191311.png"></p><p>对比一下盘面大小不同，转速相同，所以盘面大的线速度肯定快一些，自然吞吐量就高，盘面小的反之。<br><img src="https://picbed-1300534156.cos.ap-chengdu.myqcloud.com/img/20241118191727.png"></p><p>磁盘故障率和磁盘错误率</p><ul><li>故障率：表示硬盘完全失效或不可恢复损坏的概率</li><li>错误率：表示数据读写过程中出现位错误的概率</li></ul><p>磁盘的故障率还是比我理解的高很多的。包括磁盘本身和他的controller的故障率。<br><img src="https://picbed-1300534156.cos.ap-chengdu.myqcloud.com/img/20241118201020.png"></p><p>总的来说这节就是比较high level的介绍了磁盘的各种特性和一些指标，为后面介绍文件系统设计做了铺垫。</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;本节主要介绍磁盘的结构&lt;br&gt;首先Disk是由磁道、扇区和磁头几个部分组成的，柱面其实是一个逻辑概念，是指某一个磁道在所有盘面上的位置构成的一个抽象的柱面。&lt;br&gt;一些参数的含义：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;7200PRM：7200转每分钟 &lt;/li&gt;
+&lt;li&gt;120Hz：</summary>
+      
+    
+    
+    
+    <category term="learning" scheme="https://helix0819.github.io/categories/learning/"/>
+    
+    
+    <category term="file system" scheme="https://helix0819.github.io/tags/file-system/"/>
+    
+    <category term="linux" scheme="https://helix0819.github.io/tags/linux/"/>
+    
+  </entry>
   
   <entry>
     <title>Linux File System (Abstract)</title>
