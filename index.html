@@ -65,7 +65,7 @@
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
     Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"helix0819.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+    var CONFIG = {"hostname":"helix0819.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":true,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
 
     if (CONFIG.web_analytics.follow_dnt) {
       var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
@@ -208,7 +208,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="云心无我，云我无心"></span>
+            <span id="subtitle" data-typed-text=""></span>
           
         </div>
 
@@ -239,6 +239,9 @@
               <div class="col-12 col-md-10 m-auto">
                 
 
+<!-- 添加 subtitle 显示 -->
+<span id="subtitle" data-typed-text="">Arcanus for Helix and Liang</span>
+
 
   <div class="row mx-auto index-card">
     
@@ -263,51 +266,6 @@
           岛屿系列题目695.岛屿的最大面积我的思路最简单的想法  有一个函数输入是某个为1的点，然后去找这个点所在岛屿的面积。 函数计算的方式是DFS，向四周遍历直到碰到0。 遍历所有为1的点取最大值。  Code第一版code 123456789101112131415161718192021222324252627282930class Solution &#123;public:    int ma
         </div>
       </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2024-11-17 19:02" pubdate>
-              2024-11-17
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" class="category-chain-item">学习笔记</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/DFS/">#DFS</a>
-            
-              <a href="/tags/Leetcode/">#Leetcode</a>
-            
-              <a href="/tags/isLand-Problem/">#isLand Problem</a>
-            
-          </div>
-        
-      </div>
     </article>
   </div>
 
@@ -334,49 +292,6 @@
           本节主要介绍磁盘的结构首先Disk是由磁道、扇区和磁头几个部分组成的，柱面其实是一个逻辑概念，是指某一个磁道在所有盘面上的位置构成的一个抽象的柱面。一些参数的含义：  7200PRM：7200转每分钟  120Hz：一秒钟120转 转一圈是8.33ms 旋转延迟：把磁头移到指定扇区所耗时间的平均值。 seek time：移动磁头的时间（很多年没有优化过了）  寻道时间是可以去优化的，比如电梯算法、
         </div>
       </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2024-11-12 08:40" pubdate>
-              2024-11-12
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" class="category-chain-item">学习笔记</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/file-system/">#file system</a>
-            
-              <a href="/tags/linux/">#linux</a>
-            
-          </div>
-        
-      </div>
     </article>
   </div>
 
@@ -403,49 +318,6 @@
           这个系列的讲座主要是学习陈硕大佬的Linux文件系统系列视频，补充自己在文件系统部分知识的欠缺。 Kenneth Lane Thompson 在文件系统的基础上用了三周分别实现了一个editor、assembler和shell实现了操作系统Unix。可见现代Linux系统中一切皆文件的哲学其实来源于此，并不是说先有操作系统，再为其设计文件系统，而是恰恰相反现有文件系统，在此基础上搭建操作系统，可见
         </div>
       </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2024-11-11 16:22" pubdate>
-              2024-11-11
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" class="category-chain-item">学习笔记</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/file-system/">#file system</a>
-            
-              <a href="/tags/linux/">#linux</a>
-            
-          </div>
-        
-      </div>
     </article>
   </div>
 
@@ -472,51 +344,6 @@
           IntroductionFastCommit是一种文件系统的日志机制，主要针对传统物理日志方式（JBD2 ..）等存在的高磁盘写带宽占用、高IO占用和上下文切换开销等问题进行优化。
         </div>
       </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2024-11-05 09:22" pubdate>
-              2024-11-05
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/%E8%AE%BA%E6%96%87%E7%B2%BE%E8%AF%BB/" class="category-chain-item">论文精读</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/JBD2/">#JBD2</a>
-            
-              <a href="/tags/Journaling/">#Journaling</a>
-            
-              <a href="/tags/FastCommit/">#FastCommit</a>
-            
-          </div>
-        
-      </div>
     </article>
   </div>
 
@@ -543,47 +370,6 @@
           Why? How?Why?做这件事的起因是在和导师做的一篇论文想去argue一个场景，场景下涉及到去了解git的delta compression机制，所以这个系列的文章核心是弄清楚git的压缩相关机制，当然如果工作流有涉及那么也会一起研究下。
         </div>
       </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2024-11-03 17:53" pubdate>
-              2024-11-03
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" class="category-chain-item">学习笔记</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/git/">#git</a>
-            
-          </div>
-        
-      </div>
     </article>
   </div>
 
@@ -610,49 +396,6 @@
           首先记录这美好的一天先放一下昨天晚上的规划
         </div>
       </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2024-04-14 16:40" pubdate>
-              2024-04-14
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/%E7%94%9F%E6%B4%BB%E8%AE%B0%E5%BD%95/" class="category-chain-item">生活记录</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/photo/">#photo</a>
-            
-              <a href="/tags/travel/">#travel</a>
-            
-          </div>
-        
-      </div>
     </article>
   </div>
 
@@ -679,47 +422,6 @@
           Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub.
         </div>
       </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2024-04-03 17:53" pubdate>
-              2024-04-03
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/%E7%BD%91%E7%AB%99%E5%BB%BA%E8%AE%BE/" class="category-chain-item">网站建设</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/guide/">#guide</a>
-            
-          </div>
-        
-      </div>
     </article>
   </div>
 
@@ -838,13 +540,52 @@
       if (!subtitle || !typing) {
         return;
       }
-      var text = subtitle.getAttribute('data-typed-text');
-      
-        typing(text);
-      
+
+      // 定义诗句列表
+      var poems = ["拨雪寻春，烧灯续昼","烟雨蒙蒙，疏影横斜","苍山负雪，明烛天南","叹隙中骑，石中火，梦中身","落日熔金，暮云合璧","云心无我，云我无心"];
+
+      if (poems.length === 0) {
+        console.log('诗句列表为空');
+        return;
+      }
+
+      // 获取上一次显示的诗句
+      var lastPoem = localStorage.getItem('lastPoem');
+
+      // 过滤出与上次不同的诗句
+      var availablePoems = poems.filter(function(poem) {
+        return poem !== lastPoem;
+      });
+
+      // 如果所有诗句都与上次相同，则使用所有诗句
+      if (availablePoems.length === 0) {
+        availablePoems = poems;
+      }
+
+      // 随机选择一条诗句
+      var randomPoem = availablePoems[Math.floor(Math.random() * availablePoems.length)];
+
+      // 设置 data-typed-text 属性
+      subtitle.setAttribute('data-typed-text', randomPoem);
+      console.log('subtitleElement data-typed-text 已设置为:', randomPoem);
+
+      // 将当前诗句存储为上一次诗句
+      localStorage.setItem('lastPoem', randomPoem);
+
+      // 初始化 Typed.js
+      var typed = new Typed('#subtitle', {
+        strings: [randomPoem],
+        typeSpeed: 50,
+        backSpeed: 25,
+        backDelay: 1500,
+        loop: false,
+        showCursor: true,
+        cursorChar: '_'
+      });
+
+      console.log('Typed.js 已初始化，诗句:', randomPoem);
     })(window, document);
   </script>
-
 
 
 

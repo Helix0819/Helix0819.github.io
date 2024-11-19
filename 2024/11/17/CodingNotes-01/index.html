@@ -80,7 +80,7 @@
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
     Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"helix0819.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+    var CONFIG = {"hostname":"helix0819.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":true,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
 
     if (CONFIG.web_analytics.follow_dnt) {
       var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
@@ -620,13 +620,52 @@
       if (!subtitle || !typing) {
         return;
       }
-      var text = subtitle.getAttribute('data-typed-text');
-      
-        typing(text);
-      
+
+      // 定义诗句列表
+      var poems = ["拨雪寻春，烧灯续昼","烟雨蒙蒙，疏影横斜","苍山负雪，明烛天南","叹隙中骑，石中火，梦中身","落日熔金，暮云合璧","云心无我，云我无心"];
+
+      if (poems.length === 0) {
+        console.log('诗句列表为空');
+        return;
+      }
+
+      // 获取上一次显示的诗句
+      var lastPoem = localStorage.getItem('lastPoem');
+
+      // 过滤出与上次不同的诗句
+      var availablePoems = poems.filter(function(poem) {
+        return poem !== lastPoem;
+      });
+
+      // 如果所有诗句都与上次相同，则使用所有诗句
+      if (availablePoems.length === 0) {
+        availablePoems = poems;
+      }
+
+      // 随机选择一条诗句
+      var randomPoem = availablePoems[Math.floor(Math.random() * availablePoems.length)];
+
+      // 设置 data-typed-text 属性
+      subtitle.setAttribute('data-typed-text', randomPoem);
+      console.log('subtitleElement data-typed-text 已设置为:', randomPoem);
+
+      // 将当前诗句存储为上一次诗句
+      localStorage.setItem('lastPoem', randomPoem);
+
+      // 初始化 Typed.js
+      var typed = new Typed('#subtitle', {
+        strings: [randomPoem],
+        typeSpeed: 50,
+        backSpeed: 25,
+        backDelay: 1500,
+        loop: false,
+        showCursor: true,
+        cursorChar: '_'
+      });
+
+      console.log('Typed.js 已初始化，诗句:', randomPoem);
     })(window, document);
   </script>
-
 
 
 
