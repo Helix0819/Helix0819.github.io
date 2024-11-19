@@ -19,12 +19,12 @@
   <meta name="author" content="Helix">
   <meta name="keywords" content="">
   
-    <meta name="description" content="I’m now a postgraduate stuent in UESTC, NSTL lab. My research interest in data reduction(dedeuplication, delta compression…).I will share my learning and some life experience on my blog.Emai: &#56;&amp;#5">
+    <meta name="description" content="I’m now a postgraduate stuent in UESTC, NSTL lab. My research interest in data reduction(dedeuplication, delta compression…).I will share my learning and some life experience on my blog.Emai: &#56;&amp;#x">
 <meta property="og:type" content="website">
 <meta property="og:title" content="about">
 <meta property="og:url" content="https://helix0819.github.io/about/index.html">
 <meta property="og:site_name" content="Arcanus">
-<meta property="og:description" content="I’m now a postgraduate stuent in UESTC, NSTL lab. My research interest in data reduction(dedeuplication, delta compression…).I will share my learning and some life experience on my blog.Emai: &#56;&amp;#5">
+<meta property="og:description" content="I’m now a postgraduate stuent in UESTC, NSTL lab. My research interest in data reduction(dedeuplication, delta compression…).I will share my learning and some life experience on my blog.Emai: &#56;&amp;#x">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://picbed-1300534156.cos.ap-chengdu.myqcloud.com/img/20241109193200.png">
 <meta property="article:published_time" content="2024-11-02T07:17:40.000Z">
@@ -242,7 +242,7 @@
                 
 
 <article class="page-content">
-  <p>I’m now a postgraduate stuent in <em><strong>UESTC</strong></em>, NSTL lab. My research interest in <em><strong>data reduction</strong></em>(dedeuplication, delta compression…).<br>I will share my learning and some life experience on my blog.<br><em><strong>Emai</strong></em>: <a href="mailto:&#56;&#51;&#52;&#57;&#x39;&#x31;&#x32;&#48;&#51;&#64;&#113;&#x71;&#46;&#x63;&#111;&#x6d;">&#56;&#51;&#52;&#57;&#x39;&#x31;&#x32;&#48;&#51;&#64;&#113;&#x71;&#46;&#x63;&#111;&#x6d;</a><br>Feel free to contact me.:)<br><img src="https://picbed-1300534156.cos.ap-chengdu.myqcloud.com/img/20241109193200.png" srcset="/img/loading.gif" lazyload></p>
+  <p>I’m now a postgraduate stuent in <em><strong>UESTC</strong></em>, NSTL lab. My research interest in <em><strong>data reduction</strong></em>(dedeuplication, delta compression…).<br>I will share my learning and some life experience on my blog.<br><em><strong>Emai</strong></em>: <a href="mailto:&#56;&#x33;&#52;&#57;&#x39;&#x31;&#50;&#48;&#x33;&#64;&#x71;&#113;&#x2e;&#99;&#x6f;&#109;">&#56;&#x33;&#52;&#57;&#x39;&#x31;&#50;&#48;&#x33;&#64;&#x71;&#113;&#x2e;&#99;&#x6f;&#109;</a><br>Feel free to contact me.:)<br><img src="https://picbed-1300534156.cos.ap-chengdu.myqcloud.com/img/20241109193200.png" srcset="/img/loading.gif" lazyload></p>
 
 
   
@@ -355,6 +355,32 @@
 
 
   <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  
+  <!-- 添加自定义字体样式 -->
+  <style>
+    @font-face {
+      font-family: 'Slidexiaxing';
+      src: url('/fonts/Slidexiaxing-Regular.ttf') format('truetype');
+      font-weight: normal;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    /* 应用自定义字体到 subtitle */
+    #subtitle {
+      font-family: 'Slidexiaxing', sans-serif;
+      font-size: 60px;
+      color: #ffffff;
+      text-align: center;
+    }
+
+    /* 自定义 Typed.js 光标样式 */
+    .typed-cursor {
+      font-size: 24px;
+      color: #333333;
+    }
+  </style>
+  
   <script>
     (function (window, document) {
       var typing = Fluid.plugins.typing;
@@ -394,18 +420,27 @@
       // 将当前诗句存储为上一次诗句
       localStorage.setItem('lastPoem', randomPoem);
 
-      // 初始化 Typed.js
-      var typed = new Typed('#subtitle', {
-        strings: [randomPoem],
-        typeSpeed: 50,
-        backSpeed: 25,
-        backDelay: 1500,
-        loop: false,
-        showCursor: true,
-        cursorChar: '_'
-      });
+      // 检查是否已经初始化 Typed.js，避免重复初始化
+      if (!subtitle.getAttribute('data-typed-initialized')) {
+        // 初始化 Typed.js
+        var typed = new Typed('#subtitle', {
+          strings: [randomPoem],
+          typeSpeed: 50,
+          backSpeed: 0, // 设置回退速度为0，避免删除文本
+          backDelay: 0,  // 设置回退延迟为0
+          loop: false,
+          showCursor: true,
+          cursorChar: '_',
+          onComplete: function(self) {
+            // 在打字完成后，标记已初始化
+            subtitle.setAttribute('data-typed-initialized', 'true');
+          }
+        });
 
-      console.log('Typed.js 已初始化，诗句:', randomPoem);
+        console.log('Typed.js 已初始化，诗句:', randomPoem);
+      } else {
+        console.log('Typed.js 已经初始化，跳过重复初始化');
+      }
     })(window, document);
   </script>
 

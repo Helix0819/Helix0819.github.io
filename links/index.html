@@ -401,6 +401,32 @@
 
 
   <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  
+  <!-- 添加自定义字体样式 -->
+  <style>
+    @font-face {
+      font-family: 'Slidexiaxing';
+      src: url('/fonts/Slidexiaxing-Regular.ttf') format('truetype');
+      font-weight: normal;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    /* 应用自定义字体到 subtitle */
+    #subtitle {
+      font-family: 'Slidexiaxing', sans-serif;
+      font-size: 60px;
+      color: #ffffff;
+      text-align: center;
+    }
+
+    /* 自定义 Typed.js 光标样式 */
+    .typed-cursor {
+      font-size: 24px;
+      color: #333333;
+    }
+  </style>
+  
   <script>
     (function (window, document) {
       var typing = Fluid.plugins.typing;
@@ -440,18 +466,27 @@
       // 将当前诗句存储为上一次诗句
       localStorage.setItem('lastPoem', randomPoem);
 
-      // 初始化 Typed.js
-      var typed = new Typed('#subtitle', {
-        strings: [randomPoem],
-        typeSpeed: 50,
-        backSpeed: 25,
-        backDelay: 1500,
-        loop: false,
-        showCursor: true,
-        cursorChar: '_'
-      });
+      // 检查是否已经初始化 Typed.js，避免重复初始化
+      if (!subtitle.getAttribute('data-typed-initialized')) {
+        // 初始化 Typed.js
+        var typed = new Typed('#subtitle', {
+          strings: [randomPoem],
+          typeSpeed: 50,
+          backSpeed: 0, // 设置回退速度为0，避免删除文本
+          backDelay: 0,  // 设置回退延迟为0
+          loop: false,
+          showCursor: true,
+          cursorChar: '_',
+          onComplete: function(self) {
+            // 在打字完成后，标记已初始化
+            subtitle.setAttribute('data-typed-initialized', 'true');
+          }
+        });
 
-      console.log('Typed.js 已初始化，诗句:', randomPoem);
+        console.log('Typed.js 已初始化，诗句:', randomPoem);
+      } else {
+        console.log('Typed.js 已经初始化，跳过重复初始化');
+      }
     })(window, document);
   </script>
 
