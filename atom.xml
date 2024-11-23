@@ -6,7 +6,7 @@
   <link href="https://arcanus.red/atom.xml" rel="self"/>
   
   <link href="https://arcanus.red/"/>
-  <updated>2024-11-19T02:06:33.198Z</updated>
+  <updated>2024-11-23T07:46:09.936Z</updated>
   <id>https://arcanus.red/</id>
   
   <author>
@@ -15,6 +15,32 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Linux File System (Blocks and Block Groups)</title>
+    <link href="https://arcanus.red/2024/11/18/Linux-File-System-Blocks-and-Block-Groups/"/>
+    <id>https://arcanus.red/2024/11/18/Linux-File-System-Blocks-and-Block-Groups/</id>
+    <published>2024-11-18T12:16:53.000Z</published>
+    <updated>2024-11-23T07:46:09.936Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="Linux-File-System-Blocks-and-Block-Groups"><a href="#Linux-File-System-Blocks-and-Block-Groups" class="headerlink" title="Linux File System (Blocks and Block Groups)"></a>Linux File System (Blocks and Block Groups)</h1><p>BSD块大小的演变，从1K -&gt; 2K -&gt; 4K。<br><img src="https://picbed-1300534156.cos.ap-chengdu.myqcloud.com/img/20241120142439.png"></p><h2 id="Block-Allocation："><a href="#Block-Allocation：" class="headerlink" title="Block Allocation："></a><strong>Block Allocation：</strong></h2><ul><li>文件系统再分配空间的时候是以block为单位的而不是字节。</li><li>查询剩余空间的操作应该是在常数时间内完成的。</li><li>用Bitmap来管理空闲的block，一个block大小的bitmap可以管理8192个blocks。</li><li>元数据一般单独存在inode。<br><img src="https://picbed-1300534156.cos.ap-chengdu.myqcloud.com/img/20241120150848.png"></li></ul><h2 id="Block-Size"><a href="#Block-Size" class="headerlink" title="Block Size"></a><strong>Block Size</strong></h2><ul><li><p>块大小对性能影响比较明显。</p></li><li><p>块大意味着元数据开销较小，吞吐量更高些（why?）</p></li><li><p>块小意味着更多的空间节省。<br><img src="https://picbed-1300534156.cos.ap-chengdu.myqcloud.com/img/20241120151230.png"></p></li><li><p>扇区大小一般是4K。</p></li><li><p>现在的一些文件系统在创建时会根据扇区大小来设置blocksize</p></li><li><p>blocsize应该大于等于扇区size，否则对一个快操作load的扇区size不合理。</p></li><li><p>blocksize需要小于pagesize以完成正常的虚拟内存映射。<br><img src="https://picbed-1300534156.cos.ap-chengdu.myqcloud.com/img/20241120153411.png"></p></li></ul><h2 id="Max-filesystem-size"><a href="#Max-filesystem-size" class="headerlink" title="Max filesystem size"></a><strong>Max filesystem size</strong></h2><ul><li>文件系统最大大小是 blocksize * 2^ (block number bits)</li><li>最大容量的一个潜在限制是block group，其描述符必须放在一个block中，所以实际上最大不能超过256TiB。</li><li><img src="https://picbed-1300534156.cos.ap-chengdu.myqcloud.com/img/20241120154620.png"></li></ul><h2 id="Block-Groups"><a href="#Block-Groups" class="headerlink" title="Block Groups"></a><strong>Block Groups</strong></h2><ul><li>8192个block会分为一个blocks，取决于存group描述幅的大小。</li><li>划分的主要目的是优化locality<br><img src="https://picbed-1300534156.cos.ap-chengdu.myqcloud.com/img/20241122142105.png"></li></ul><h2 id="Group-Descriptor"><a href="#Group-Descriptor" class="headerlink" title="Group Descriptor"></a><strong>Group Descriptor</strong></h2><ul><li>仅凭group descriptor不能完整的得到一个block group的信息，可能确实这个group从那个blcok开始，有多少inode等</li><li>Ext2中的group descriptor是32B， Ext4拓展为64B。<br><img src="https://picbed-1300534156.cos.ap-chengdu.myqcloud.com/img/20241122144534.png"></li></ul><h2 id="Fragments-and-Clusters"><a href="#Fragments-and-Clusters" class="headerlink" title="Fragments and Clusters"></a>Fragments and Clusters</h2><ul><li>Ext2文件系统把Block继续切分为更小的Fragments。</li><li>Cluster相当于把block聚合在一起分配，用于给一些大文件分配空间。<br><img src="https://picbed-1300534156.cos.ap-chengdu.myqcloud.com/img/20241122144846.png"></li></ul><h2 id="Block-size-is-important-to-filesystem"><a href="#Block-size-is-important-to-filesystem" class="headerlink" title="Block size is important to filesystem"></a>Block size is important to filesystem</h2><p><img src="https://picbed-1300534156.cos.ap-chengdu.myqcloud.com/img/20241122145305.png"></p><h2 id="Q-A"><a href="#Q-A" class="headerlink" title="Q &amp; A"></a>Q &amp; A</h2><h3 id="Q-Block-group-和-cluster的概念会不会有些重叠呢？"><a href="#Q-Block-group-和-cluster的概念会不会有些重叠呢？" class="headerlink" title="Q: Block group 和 cluster的概念会不会有些重叠呢？"></a>Q: Block group 和 cluster的概念会不会有些重叠呢？</h3><h3 id="A"><a href="#A" class="headerlink" title="A:"></a>A:</h3><ul><li>功能定位不同：<ul><li>block group是文件系统的管理单元,包含管理结构(inode表等)</li><li>cluster是文件存储的分配单元,纯粹用于数据存储</li></ul></li><li>使用场景不同：<ul><li>block group主要用于ext等现代文件系统</li><li>cluster概念早期在FAT文件系统中就有使用</li></ul></li><li>大小特征不同：  <ul><li>block group通常较大,包含多个blocks和管理结构</li><li>cluster大小相对较小,主要考虑存储效率</li></ul></li></ul>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;Linux-File-System-Blocks-and-Block-Groups&quot;&gt;&lt;a href=&quot;#Linux-File-System-Blocks-and-Block-Groups&quot; class=&quot;headerlink&quot; title=&quot;Linux File</summary>
+      
+    
+    
+    
+    <category term="learning" scheme="https://arcanus.red/categories/learning/"/>
+    
+    
+    <category term="file system" scheme="https://arcanus.red/tags/file-system/"/>
+    
+    <category term="linux" scheme="https://arcanus.red/tags/linux/"/>
+    
+  </entry>
   
   <entry>
     <title>CodingNotes(01)</title>
