@@ -4,6 +4,35 @@
   
   
   <entry>
+    <title>MIT 6.824-Intro</title>
+    <link href="/2024/12/07/MIT-6-824-Intro/"/>
+    <url>/2024/12/07/MIT-6-824-Intro/</url>
+    
+    <content type="html"><![CDATA[<h1 id="MIT-6-824-Intro"><a href="#MIT-6-824-Intro" class="headerlink" title="MIT 6.824-Intro"></a>MIT 6.824-Intro</h1><h2 id="1-背景"><a href="#1-背景" class="headerlink" title="1. 背景"></a>1. 背景</h2><p>学习分布式系统相关知识，系统性的补全相关概念知识，为找暑期实习和秋招做准备。</p><p>使用的一些学习资料如下：</p><ul><li>视频：<ul><li><a href="https://www.bilibili.com/video/BV1xyxpeaE4N/?spm_id_from=333.999.0.0&vd_source=38f9aebaf1256061110ac23dc426e576">MIT《分布式系统|MIT 6.824 Distributed Systems 2020》中英字幕</a></li></ul></li><li>课程主页：<a href="https://pdos.csail.mit.edu/6.824/schedule.html">Schedule</a></li><li>相关博客：<ul><li><a href="https://xiaodongq.github.io/2024/08/17/mit-6-824-1-overview-mapreduce/">MIT 6.824学习笔记</a></li><li><a href="https://www.qtmuniao.com/2020/02/29/6-824-video-notes-1/">MIT 6.824 2020 视频笔记</a></li></ul></li></ul><h2 id="2-学习方式"><a href="#2-学习方式" class="headerlink" title="2.学习方式"></a>2.学习方式</h2><ol><li>快速阅读下推荐论文。</li><li>打算先快速过一遍视频，对概念有个印象，每节课整理笔记。</li><li>把优质博客的内容过一过，查缺补漏。</li><li>争取将课程实验都完整的做一遍。</li></ol><h2 id="3-MapReduce论文笔记"><a href="#3-MapReduce论文笔记" class="headerlink" title="3. MapReduce论文笔记"></a>3. MapReduce论文笔记</h2><h3 id="3-1-编程模型"><a href="#3-1-编程模型" class="headerlink" title="3.1 编程模型"></a>3.1 编程模型</h3><p>MapReduce 编程模型的原理是：利用一个输入 key&#x2F;value pair 集合来产生一个输出的 key&#x2F;value pair 集合。</p><p>MapReduce 库的用户用两个函数表达这个计算： Map 和 Reduce：</p><ul><li><p>用户自定义的Map 函数接受一个输入的 key&#x2F;value pair 值，然后产生一个中间 key&#x2F;value pair 值的集合。MapReduce 库把所有具有相同中间 key 值 I 的中间 value 值集合在一起后传递给 Reduce 函数。</p></li><li><p>用户自定义的Reduce 函数接受一个中间 key 的值 I 和相关的一个 value 值的集合。Reduce 函数合并这些value 值，形成一个较小的 value 值的集合。</p></li></ul><p>类型表示：</p><ul><li>map(k1,v1) -&gt; list(k2,v2)。表示由输入得到中间输出，两者的key和value都在不同的域上，所以分别用k1&#x2F;k2、v1&#x2F;v2区分了</li><li>reduce(k2,list(v2)) -&gt;list(v2)。而reduce输出对应的key和value和上面的中间输出结果的域是相同的，也是用k2、v2表示</li></ul><p>示例：论文里有好几个示例，这里选取几个：</p><ul><li>计算 URL 访问频率：<ul><li>Map 函数处理日志中 web 页面请求的记录，然后输出(URL,1)。</li><li>Reduce 函数把相同URL的value值都累加起来，产生(URL,记录总数) 结果</li></ul></li><li>倒排索引：<ul><li>Map 函数分析每个文档输出一个(词,文档号)的列表</li><li>Reduce 函数的输入是一个给定词的所有(词，文档号)，排序所有的文档号，输出( 词, list(文档号) )。</li></ul></li><li>分布式排序：<ul><li>Map 函数从每个记录提取 key，输出(key,record)</li><li>Reduce 函数不改变任何的值。这个运算依赖分区机制和排序属性。</li></ul></li></ul><h3 id="3-2-总体执行流程"><a href="#3-2-总体执行流程" class="headerlink" title="3.2. 总体执行流程"></a>3.2. 总体执行流程</h3><p>通过将 Map 调用的输入数据自动分割为 M 个数据片段的集合， Map 调用被分布到多台机器上执行。输入的数据片段能够在不同的机器上并行处理。</p><p>使用分区函数将 Map 调用产生的中间 key 值分成 R 个不同分区（例如 hash(key) mod R）， Reduce 调用也被分布到多台机器上执行。分区数量（R）和分区函数由用户来指定。</p><p>总体执行流程示意图：<br><img src="https://picbed-1300534156.cos.ap-chengdu.myqcloud.com/img/20241207131746.png"></p><h2 id="4-视频笔记"><a href="#4-视频笔记" class="headerlink" title="4. 视频笔记"></a>4. 视频笔记</h2><h3 id="4-1-课程会讨论到的相关概念"><a href="#4-1-课程会讨论到的相关概念" class="headerlink" title="4.1 课程会讨论到的相关概念"></a>4.1 课程会讨论到的相关概念</h3><p>这门课是一门关于基础设施建设的课程。<br>基础设施建设通常包括：</p><ul><li>存储</li><li>通信</li><li>计算</li></ul><p>我们在建设分布式系统时，希望隐藏其分布式特性，使其看起来和用起来都像是单机系统，当然这是理想化的，很难实现。</p><p>针对这些抽象，我们会有一下几个topics：</p><ul><li>RPC：远程过程调用</li><li>Threads：多线程并发</li><li>Concurrency Control：数据一致性</li><li>Performance：更好的性能</li><li>Scalability：希望系统的性能随着设备拓展是线性的</li><li>Falut Toleran：分布式系统会极大程度增大错误的发生，所以容错机制非常重要。<ul><li>availability：在系统出现故障时仍能提供可用的服务，比如一个副本服务器故障，另一个副本可以提供服务。</li><li>recoverability：可以在出错后恢复正确的状态。  <ol><li>使用非易失性存储设备，记录日志等。</li><li>replication，存储多个副本。</li></ol></li></ul></li><li>Consistency：<ul><li>假设我们支持俩种操作<ul><li>put(k,v)</li><li>get(k) -&gt; v</li></ul></li><li>因为在分布式系统中有很多副本，所以会引出一致性问题，因此在系统可能存在很多不同版本的kv对。 <ul><li>强一致性：保证每次get都能拿到最新的数据  <ol><li>保证数据一致性的开销很大。</li></ol></li><li>弱一致性：不保证每次get都能拿到最新的数据<ol><li>当副本之间相隔很远，可以考虑保证弱一致性。为了保证俩个副本的独立性，一般不同的副本会保存在不同的物理位置上。</li></ol></li></ul></li></ul></li></ul><h3 id="4-2-MapReduce"><a href="#4-2-MapReduce" class="headerlink" title="4.2 MapReduce"></a>4.2 MapReduce</h3><p>MapReduce时Goole提出的一项工作，其背景是对TiB级别的数据进行计算。比如建立网页索引，进行排序等。所以Google希望使用大量的计算机去运行大量的任务。他们希望一个framwork让不同背景的工程师编写程序去将他们的计算任务分散到不同的计算机上进行计算。</p><p>示例：word count<br>Input 1 -&gt; Map a,1 b,1<br>Input 2 -&gt; Map     b,1<br>Input 3 -&gt; Map a,1     c,1  </p><p>收集<br>所有的a，1给一个reduce实例 -&gt; a,2<br>所有的b，1去一个reduce实例 -&gt; b,2<br>…   </p><p>示例：<br>Map(k,v)<br>函数输入k是文件名，v是文件内容，功能是把划分成不同的words，对于每个words：emit(word,1)</p><p>Reduce(k,v)<br>    emit(len(v))</p><p>几乎所有Map操作设计的数据都是在本地的而不需要网络通讯，否则网络通讯开销很大。但是所有的map产生发的结果还是需要集中到一个reduce实例所在的服务器上，通信开销还是很大。</p>]]></content>
+    
+    
+    <categories>
+      
+      <category>学习笔记</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>MIT 6.824</tag>
+      
+      <tag>Distributed System</tag>
+      
+      <tag>Storage</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>Linux File System (File operations)</title>
     <link href="/2024/12/07/Linux-File-System-File-operations/"/>
     <url>/2024/12/07/Linux-File-System-File-operations/</url>
