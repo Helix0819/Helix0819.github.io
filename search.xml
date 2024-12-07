@@ -4,6 +4,33 @@
   
     
     <entry>
+      <title>Linux File System (File operations)</title>
+      <link href="/2024/12/07/Linux-File-System-File-operations/"/>
+      <url>/2024/12/07/Linux-File-System-File-operations/</url>
+      
+        <content type="html"><![CDATA[<h1 id="Linux-File-System-File-operations"><a href="#Linux-File-System-File-operations" class="headerlink" title="Linux File System (File operations)"></a>Linux File System (File operations)</h1><p>inode结构主要有以下成员：<br><strong>&#x2F;&#x2F; 必须有的</strong>  </p><ul><li>mode：类型+权限</li><li>文件大小</li><li>引用计数</li><li>块地址</li></ul><p><strong>&#x2F;&#x2F; 肯定没有的</strong>  </p><ul><li>文件名：一个文件可以有多个文件名，文件的文件名不存在inode里</li></ul><p><strong>&#x2F;&#x2F; 可以有的</strong></p><ul><li>时间戳，一般不更新访问时间，维护设备寿命</li></ul><p><strong>inode number 在一个文件系统中是唯一的</strong>  </p><ul><li>硬链接不能跨文件系统  </li><li>软链接可以跨文件系统</li></ul><p><strong>硬链接（Hard Link）</strong>  </p><ul><li>定义：硬链接是指多个文件名指向同一个 inode（索引节点）。</li><li>特点：  <ul><li>共用 inode：所有硬链接共享相同的 inode 号。  </li><li>文件访问：无论通过哪个链接访问文件，都是访问同一个数据块。</li><li>限制：  <ul><li>不能链接目录，以防止形成循环结构。</li><li>不能跨文件系统，因为 inode 在不同文件系统中是独立的。</li></ul></li></ul></li></ul><p><strong>软链接（Symbolic Link 或 Symlink）</strong></p><ul><li>定义：软链接是一个独立的文件，内容是另一个文件的路径。  </li><li>特点：<ul><li>不同 inode：软链接有自己的 inode，指向目标文件的路径。</li><li>灵活性：可以链接目录和跨文件系统的文件。</li><li>依赖性：如果目标文件被删除或移动，软链接将失效（成为“断链”）。<br><img src="https://picbed-1300534156.cos.ap-chengdu.myqcloud.com/img/20241206155844.png"></li></ul></li></ul><h2 id="Two-files-opened-by-a-process"><a href="#Two-files-opened-by-a-process" class="headerlink" title="Two files opened by a process"></a>Two files opened by a process</h2><p>举一个例子：<br>假设web server正在写一个access.log<br>此时开发人员想看一下access.log，使用less access.log命令<br>因此打开<strong>俩次</strong>这个文件，生成俩个file table entries（打开一个文件就是一个file table entry）<br>但是只有一个inode entry，file size存在inode中，所以开发人员是可以看到access.log的变化的。 </p><p>后面也会细说，其实文件操作主要涉及三个表结构，文件描述符表、文件表和inode表。<br><img src="https://picbed-1300534156.cos.ap-chengdu.myqcloud.com/img/20241206160138.png"></p><h2 id="文件描述符"><a href="#文件描述符" class="headerlink" title="文件描述符"></a>文件描述符</h2><p>有三个层次：</p><ol><li>file descriptor table （每个进程一个的）</li><li>file entry table, w.file offset （全局）</li><li>indoe table, w&#x2F;file size （全局）</li></ol><p>文件状态通常在file table中，只有FD_CLOEXEC放在file descriptor table中.<br>图示一下：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><code class="hljs bash">┌─────────────────────────────────────────────────────┐<br>│                   Process Table                      │<br>├─────────┬─────────┬─────────┬─────────┬────────────┤<br>│Process 1│Process 2│Process 3│   ...   │Process N   │<br>│  PID 1  │  PID 2  │  PID 3  │         │  PID N    │<br>│         │         │         │         │            │<br>│ fd[0]─┐ │ fd[0]─┐ │ fd[0]─┐ │         │ fd[0]─┐   │<br>│ fd[1]─┼─│►fd[1]─┼─│►fd[1]─┼─│►  ...   │ fd[1]─┼─┐ │<br>│ fd[2]─┘ │ fd[2]─┘ │ fd[2]─┘ │         │ fd[2]─┘ │ │<br>└─────────┴─────────┴─────────┴─────────┴────────────┘<br>           │                                        │<br>           ▼                                        ▼<br>┌─────────────────────────────────────────────────────┐<br>│                    File Table                        │<br>├─────────┬─────────┬─────────┬─────────┬────────────┤<br>│File Ptr1│File Ptr2│File Ptr3│   ...   │File PtrN   │<br>│f_count=2│f_count=1│f_count=3│         │f_count=1   │<br>│f_pos    │f_pos    │f_pos    │         │f_pos       │<br>│f_flags  │f_flags  │f_flags  │         │f_flags     │<br>│f_mode   │f_mode   │f_mode   │         │f_mode      │<br>└────┬────┴────┬────┴────┬────┴─────────┴─────┬──────┘<br>     │         │         │                     │<br>     ▼         ▼         ▼                     ▼<br>┌─────────────────────────────────────────────────────┐<br>│                   Inode Table                        │<br>├─────────┬─────────┬─────────┬─────────┬────────────┤<br>│Inode 1  │Inode 2  │Inode 3  │   ...   │Inode N    │<br>└─────────┴─────────┴─────────┴─────────┴────────────┘<br></code></pre></td></tr></table></figure><p><img src="https://picbed-1300534156.cos.ap-chengdu.myqcloud.com/img/20241206160752.png"></p><h2 id="open-2-twice-vs-open-2-then-dup-2-fork-2"><a href="#open-2-twice-vs-open-2-then-dup-2-fork-2" class="headerlink" title="open(2)twice vs. open(2) then dup(2)&#x2F;fork(2)"></a>open(2)twice vs. open(2) then dup(2)&#x2F;fork(2)</h2><p><img src="https://picbed-1300534156.cos.ap-chengdu.myqcloud.com/img/20241206161158.png"></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 学习笔记 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> file system </tag>
+            
+            <tag> linux </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>Linux File System (Blocks and Block Groups)</title>
       <link href="/2024/11/18/Linux-File-System-Blocks-and-Block-Groups/"/>
       <url>/2024/11/18/Linux-File-System-Blocks-and-Block-Groups/</url>
@@ -13,7 +40,7 @@
       
       <categories>
           
-          <category> learning </category>
+          <category> 学习笔记 </category>
           
       </categories>
       

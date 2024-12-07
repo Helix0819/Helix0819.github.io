@@ -6,7 +6,7 @@
   <link href="https://arcanus.red/atom.xml" rel="self"/>
   
   <link href="https://arcanus.red/"/>
-  <updated>2024-11-23T07:46:09.936Z</updated>
+  <updated>2024-12-07T04:54:58.841Z</updated>
   <id>https://arcanus.red/</id>
   
   <author>
@@ -17,11 +17,37 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>Linux File System (File operations)</title>
+    <link href="https://arcanus.red/2024/12/07/Linux-File-System-File-operations/"/>
+    <id>https://arcanus.red/2024/12/07/Linux-File-System-File-operations/</id>
+    <published>2024-12-07T04:54:58.000Z</published>
+    <updated>2024-12-07T04:54:58.841Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="Linux-File-System-File-operations"><a href="#Linux-File-System-File-operations" class="headerlink" title="Linux File System (File operations)"></a>Linux File System (File operations)</h1><p>inode结构主要有以下成员：<br><strong>&#x2F;&#x2F; 必须有的</strong>  </p><ul><li>mode：类型+权限</li><li>文件大小</li><li>引用计数</li><li>块地址</li></ul><p><strong>&#x2F;&#x2F; 肯定没有的</strong>  </p><ul><li>文件名：一个文件可以有多个文件名，文件的文件名不存在inode里</li></ul><p><strong>&#x2F;&#x2F; 可以有的</strong></p><ul><li>时间戳，一般不更新访问时间，维护设备寿命</li></ul><p><strong>inode number 在一个文件系统中是唯一的</strong>  </p><ul><li>硬链接不能跨文件系统  </li><li>软链接可以跨文件系统</li></ul><p><strong>硬链接（Hard Link）</strong>  </p><ul><li>定义：硬链接是指多个文件名指向同一个 inode（索引节点）。</li><li>特点：  <ul><li>共用 inode：所有硬链接共享相同的 inode 号。  </li><li>文件访问：无论通过哪个链接访问文件，都是访问同一个数据块。</li><li>限制：  <ul><li>不能链接目录，以防止形成循环结构。</li><li>不能跨文件系统，因为 inode 在不同文件系统中是独立的。</li></ul></li></ul></li></ul><p><strong>软链接（Symbolic Link 或 Symlink）</strong></p><ul><li>定义：软链接是一个独立的文件，内容是另一个文件的路径。  </li><li>特点：<ul><li>不同 inode：软链接有自己的 inode，指向目标文件的路径。</li><li>灵活性：可以链接目录和跨文件系统的文件。</li><li>依赖性：如果目标文件被删除或移动，软链接将失效（成为“断链”）。<br><img src="https://picbed-1300534156.cos.ap-chengdu.myqcloud.com/img/20241206155844.png"></li></ul></li></ul><h2 id="Two-files-opened-by-a-process"><a href="#Two-files-opened-by-a-process" class="headerlink" title="Two files opened by a process"></a>Two files opened by a process</h2><p>举一个例子：<br>假设web server正在写一个access.log<br>此时开发人员想看一下access.log，使用less access.log命令<br>因此打开<strong>俩次</strong>这个文件，生成俩个file table entries（打开一个文件就是一个file table entry）<br>但是只有一个inode entry，file size存在inode中，所以开发人员是可以看到access.log的变化的。 </p><p>后面也会细说，其实文件操作主要涉及三个表结构，文件描述符表、文件表和inode表。<br><img src="https://picbed-1300534156.cos.ap-chengdu.myqcloud.com/img/20241206160138.png"></p><h2 id="文件描述符"><a href="#文件描述符" class="headerlink" title="文件描述符"></a>文件描述符</h2><p>有三个层次：</p><ol><li>file descriptor table （每个进程一个的）</li><li>file entry table, w.file offset （全局）</li><li>indoe table, w&#x2F;file size （全局）</li></ol><p>文件状态通常在file table中，只有FD_CLOEXEC放在file descriptor table中.<br>图示一下：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><code class="hljs bash">┌─────────────────────────────────────────────────────┐<br>│                   Process Table                      │<br>├─────────┬─────────┬─────────┬─────────┬────────────┤<br>│Process 1│Process 2│Process 3│   ...   │Process N   │<br>│  PID 1  │  PID 2  │  PID 3  │         │  PID N    │<br>│         │         │         │         │            │<br>│ fd[0]─┐ │ fd[0]─┐ │ fd[0]─┐ │         │ fd[0]─┐   │<br>│ fd[1]─┼─│►fd[1]─┼─│►fd[1]─┼─│►  ...   │ fd[1]─┼─┐ │<br>│ fd[2]─┘ │ fd[2]─┘ │ fd[2]─┘ │         │ fd[2]─┘ │ │<br>└─────────┴─────────┴─────────┴─────────┴────────────┘<br>           │                                        │<br>           ▼                                        ▼<br>┌─────────────────────────────────────────────────────┐<br>│                    File Table                        │<br>├─────────┬─────────┬─────────┬─────────┬────────────┤<br>│File Ptr1│File Ptr2│File Ptr3│   ...   │File PtrN   │<br>│f_count=2│f_count=1│f_count=3│         │f_count=1   │<br>│f_pos    │f_pos    │f_pos    │         │f_pos       │<br>│f_flags  │f_flags  │f_flags  │         │f_flags     │<br>│f_mode   │f_mode   │f_mode   │         │f_mode      │<br>└────┬────┴────┬────┴────┬────┴─────────┴─────┬──────┘<br>     │         │         │                     │<br>     ▼         ▼         ▼                     ▼<br>┌─────────────────────────────────────────────────────┐<br>│                   Inode Table                        │<br>├─────────┬─────────┬─────────┬─────────┬────────────┤<br>│Inode 1  │Inode 2  │Inode 3  │   ...   │Inode N    │<br>└─────────┴─────────┴─────────┴─────────┴────────────┘<br></code></pre></td></tr></table></figure><p><img src="https://picbed-1300534156.cos.ap-chengdu.myqcloud.com/img/20241206160752.png"></p><h2 id="open-2-twice-vs-open-2-then-dup-2-fork-2"><a href="#open-2-twice-vs-open-2-then-dup-2-fork-2" class="headerlink" title="open(2)twice vs. open(2) then dup(2)&#x2F;fork(2)"></a>open(2)twice vs. open(2) then dup(2)&#x2F;fork(2)</h2><p><img src="https://picbed-1300534156.cos.ap-chengdu.myqcloud.com/img/20241206161158.png"></p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;Linux-File-System-File-operations&quot;&gt;&lt;a href=&quot;#Linux-File-System-File-operations&quot; class=&quot;headerlink&quot; title=&quot;Linux File System (File op</summary>
+      
+    
+    
+    
+    <category term="学习笔记" scheme="https://arcanus.red/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"/>
+    
+    
+    <category term="file system" scheme="https://arcanus.red/tags/file-system/"/>
+    
+    <category term="linux" scheme="https://arcanus.red/tags/linux/"/>
+    
+  </entry>
+  
+  <entry>
     <title>Linux File System (Blocks and Block Groups)</title>
     <link href="https://arcanus.red/2024/11/18/Linux-File-System-Blocks-and-Block-Groups/"/>
     <id>https://arcanus.red/2024/11/18/Linux-File-System-Blocks-and-Block-Groups/</id>
     <published>2024-11-18T12:16:53.000Z</published>
-    <updated>2024-11-23T07:46:09.936Z</updated>
+    <updated>2024-12-06T07:21:49.600Z</updated>
     
     <content type="html"><![CDATA[<h1 id="Linux-File-System-Blocks-and-Block-Groups"><a href="#Linux-File-System-Blocks-and-Block-Groups" class="headerlink" title="Linux File System (Blocks and Block Groups)"></a>Linux File System (Blocks and Block Groups)</h1><p>BSD块大小的演变，从1K -&gt; 2K -&gt; 4K。<br><img src="https://picbed-1300534156.cos.ap-chengdu.myqcloud.com/img/20241120142439.png"></p><h2 id="Block-Allocation："><a href="#Block-Allocation：" class="headerlink" title="Block Allocation："></a><strong>Block Allocation：</strong></h2><ul><li>文件系统再分配空间的时候是以block为单位的而不是字节。</li><li>查询剩余空间的操作应该是在常数时间内完成的。</li><li>用Bitmap来管理空闲的block，一个block大小的bitmap可以管理8192个blocks。</li><li>元数据一般单独存在inode。<br><img src="https://picbed-1300534156.cos.ap-chengdu.myqcloud.com/img/20241120150848.png"></li></ul><h2 id="Block-Size"><a href="#Block-Size" class="headerlink" title="Block Size"></a><strong>Block Size</strong></h2><ul><li><p>块大小对性能影响比较明显。</p></li><li><p>块大意味着元数据开销较小，吞吐量更高些（why?）</p></li><li><p>块小意味着更多的空间节省。<br><img src="https://picbed-1300534156.cos.ap-chengdu.myqcloud.com/img/20241120151230.png"></p></li><li><p>扇区大小一般是4K。</p></li><li><p>现在的一些文件系统在创建时会根据扇区大小来设置blocksize</p></li><li><p>blocsize应该大于等于扇区size，否则对一个快操作load的扇区size不合理。</p></li><li><p>blocksize需要小于pagesize以完成正常的虚拟内存映射。<br><img src="https://picbed-1300534156.cos.ap-chengdu.myqcloud.com/img/20241120153411.png"></p></li></ul><h2 id="Max-filesystem-size"><a href="#Max-filesystem-size" class="headerlink" title="Max filesystem size"></a><strong>Max filesystem size</strong></h2><ul><li>文件系统最大大小是 blocksize * 2^ (block number bits)</li><li>最大容量的一个潜在限制是block group，其描述符必须放在一个block中，所以实际上最大不能超过256TiB。</li><li><img src="https://picbed-1300534156.cos.ap-chengdu.myqcloud.com/img/20241120154620.png"></li></ul><h2 id="Block-Groups"><a href="#Block-Groups" class="headerlink" title="Block Groups"></a><strong>Block Groups</strong></h2><ul><li>8192个block会分为一个blocks，取决于存group描述幅的大小。</li><li>划分的主要目的是优化locality<br><img src="https://picbed-1300534156.cos.ap-chengdu.myqcloud.com/img/20241122142105.png"></li></ul><h2 id="Group-Descriptor"><a href="#Group-Descriptor" class="headerlink" title="Group Descriptor"></a><strong>Group Descriptor</strong></h2><ul><li>仅凭group descriptor不能完整的得到一个block group的信息，可能确实这个group从那个blcok开始，有多少inode等</li><li>Ext2中的group descriptor是32B， Ext4拓展为64B。<br><img src="https://picbed-1300534156.cos.ap-chengdu.myqcloud.com/img/20241122144534.png"></li></ul><h2 id="Fragments-and-Clusters"><a href="#Fragments-and-Clusters" class="headerlink" title="Fragments and Clusters"></a>Fragments and Clusters</h2><ul><li>Ext2文件系统把Block继续切分为更小的Fragments。</li><li>Cluster相当于把block聚合在一起分配，用于给一些大文件分配空间。<br><img src="https://picbed-1300534156.cos.ap-chengdu.myqcloud.com/img/20241122144846.png"></li></ul><h2 id="Block-size-is-important-to-filesystem"><a href="#Block-size-is-important-to-filesystem" class="headerlink" title="Block size is important to filesystem"></a>Block size is important to filesystem</h2><p><img src="https://picbed-1300534156.cos.ap-chengdu.myqcloud.com/img/20241122145305.png"></p><h2 id="Q-A"><a href="#Q-A" class="headerlink" title="Q &amp; A"></a>Q &amp; A</h2><h3 id="Q-Block-group-和-cluster的概念会不会有些重叠呢？"><a href="#Q-Block-group-和-cluster的概念会不会有些重叠呢？" class="headerlink" title="Q: Block group 和 cluster的概念会不会有些重叠呢？"></a>Q: Block group 和 cluster的概念会不会有些重叠呢？</h3><h3 id="A"><a href="#A" class="headerlink" title="A:"></a>A:</h3><ul><li>功能定位不同：<ul><li>block group是文件系统的管理单元,包含管理结构(inode表等)</li><li>cluster是文件存储的分配单元,纯粹用于数据存储</li></ul></li><li>使用场景不同：<ul><li>block group主要用于ext等现代文件系统</li><li>cluster概念早期在FAT文件系统中就有使用</li></ul></li><li>大小特征不同：  <ul><li>block group通常较大,包含多个blocks和管理结构</li><li>cluster大小相对较小,主要考虑存储效率</li></ul></li></ul>]]></content>
     
@@ -33,7 +59,7 @@
     
     
     
-    <category term="learning" scheme="https://arcanus.red/categories/learning/"/>
+    <category term="学习笔记" scheme="https://arcanus.red/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"/>
     
     
     <category term="file system" scheme="https://arcanus.red/tags/file-system/"/>
